@@ -4,9 +4,8 @@ def arquivoExiste(nomedoarquivo):
     except:
         return False
     else:
-        return True
-    finally:
         a.close()
+        return True
 
 def criarArquivo(nomedoarquivo):
     try:

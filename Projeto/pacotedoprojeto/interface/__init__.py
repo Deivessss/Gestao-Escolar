@@ -31,39 +31,72 @@ def menu_pais():
         except:
             print('Por favor, digite um número inteiro válido')
 
-def consultar_notas_aluno(nomearquivo):
-    try:
-        print('-'*30)
-        print('Consultar notas de um aluno:')
-        print('-' * 30)
-        matricula = int(input('Digite a matrícula do aluno que deseja consultar: '))
-
-        with open(nomearquivo, 'r') as a:
-            for linha in a:
-                dados = linha.split(';')
-                if len(dados) < 2:
-                    print('Erro: linha inválida no arquivo.')
-                    continue
-
-                if int(dados[0]) == matricula:
-                    print(f'Aluno encontrado! Segue as notas do aluno: {dados[1]}')
-                    return
-
-        print('Aluno não encontrado.')
-
-    except FileNotFoundError:
-        print('Erro: arquivo não encontrado.')
-    except ValueError:
-        print('Erro: matrícula inválida.')
-    except Exception as e:
-        print(f'Erro: {e}')
-
 
 def menu_professores():
     while True:
         try:
-            print('-'*30)
-            print('Seja bem-vindo, Professor/Professora!')
-            matricula = int(input('Digite a matrícula do aluno que deseja modificar: '))
+            print('-'*42)
+            print(f'{'Seja bem-vindo, Professor/Professora!'.center(42)}')
+            print('-' * 42)
+            print('1 - Consultar Notas de um aluno')
+            print('2 - Cadastrar novo aluno.')
+            escolha = int(input('Sua escolha: '))
+            if escolha not in [1,2]:
+                print('Erro! Escolha 1 ou 2')
+            else:
+                return escolha
         except:
-            print('Por favor, digite uma matrícula válida.')
+            print('Erro! Digite um número inteiro válido.')
+
+
+
+def consultar_notas_aluno(nomearquivo):
+    try:
+        print('-'*42)
+        print(f'{'Consultar notas de um aluno:'.center(42)}')
+        print('-' * 42)
+        matricula = int(input('Digite a matrícula do aluno que deseja consultar: '))
+        aluno_encontrado = False
+        with open(nomearquivo, 'r') as a:
+            for linha in a:
+                dados = linha.split(';')
+                if int(dados[0]) == matricula:
+                    aluno_encontrado = True
+                    print('-' * 30)
+                    print(f'Aluno: {dados[1]}')
+                    print(f'Idade: {dados[2]}')
+                    print('Notas:')
+                    print(f'Português: {dados[3]}')
+                    print(f'Matemática: {dados[4]}')
+                    print(f'Geografia: {dados[5]}')
+                    print(f'História: {dados[6]}')
+                    print(f'Educação Física: {dados[7]}')
+        if not aluno_encontrado:
+            print('Erro! Não há nenhum aluno com essa matrícula.')
+    except Exception as e:
+        print(f'Erro: {e}')
+
+def cadastrar_novo_aluno(nomedoarquivo):
+    print('-'*42)
+    print(f'{'Cadastrar novo aluno'.center(42)}')
+    print('-' * 42)
+
+    #descobrindo qual é a última matricula.
+    with open(nomedoarquivo, 'r') as a:
+        for linha in a:
+            matricula = int(linha.split(';')[0]) + 1
+    try:
+        nomedoaluno = input('Nome do aluno:').capitalize()
+        idade = int(input('Idade: '))
+        Português = int(input('Português: '))
+        Matemática = int(input('Matemática: '))
+        Geografia = int(input('Geografia: '))
+        História = int(input('História: '))
+        Educação_Física = int(input('Educação Física: '))
+        with open(nomedoarquivo, 'a') as a:
+            a.write(f'{matricula};{nomedoaluno};{idade};{Português};{Matemática};'
+                    f'{Geografia};{História};{Educação_Física}\n')
+    except Exception as erro:
+        print(f'Erro: {erro}')
+    else:
+        print(f'Aluno {nomedoaluno} cadastrado com sucesso. Matrícula: {matricula}')
